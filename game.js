@@ -2,18 +2,13 @@ const buttonColours = ["red", "blue", "green", "yellow"];
 var userClickedPattern = [];
 var gamePattern = [];
 
-// play sound when a button is clicked
-function playSound(name) {
-   var audio = new Audio("sounds/" + name + ".mp3");
-   audio.play();
-}
-
 // select button class (since all buttons have the same class)
 // get the id of the button clicked(the colour) and add to userClickedPattern
 $(".btn").click(function(){
    var userChosenColour = $(this).attr("id");
    userClickedPattern.push(userChosenColour);
    playSound(userChosenColour);
+   animatePress(userChosenColour);
 });
 
 // function creates a new pattern by generating random numbers between 0-3\
@@ -24,6 +19,21 @@ function nextSequence(){
    gamePattern.push(randomChosenColour);
 
    // select button with the same id as the randomChosenColour and animate a flash
-   $("#"+randomChosenColour).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+   $("#" + randomChosenColour).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
    playSound(randomChosenColour);
+}
+
+// play sound when a button is clicked
+function playSound(name) {
+   var audio = new Audio("sounds/" + name + ".mp3");
+   audio.play();
+}
+
+// add pressed style to the button clicked for few microseconds
+function animatePress(currentColour) {
+   $('#' + currentColour).addClass("pressed");
+   setTimeout(function() {
+      $('#' + currentColour).removeClass('pressed');
+   }, 100);
+
 }
