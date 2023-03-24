@@ -21,11 +21,17 @@ $(".btn").click(function(){
    userClickedPattern.push(userChosenColour);
    playSound(userChosenColour);
    animatePress(userChosenColour);
+
+   // pass index of last answer in the user's sequence
+   checkAnswer(userClickedPattern.length - 1);
 });
 
 // function creates a new pattern by generating random numbers between 0-3\
 // used to get a random  colour from the colors array
 function nextSequence(){
+   // reset userClickedPattern for next level
+   userClickedPattern = [];
+
    // increase the level anytime this function is called
    level ++;
 
@@ -55,3 +61,47 @@ function animatePress(currentColour) {
 
 }
 
+// checks whether gamePattern is the same as the userPattern  at the current level
+function checkAnswer(currentLevel) {
+   // check if most recent answer is the same as game pattern
+   if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
+      console.log("success");
+      // check if sequence is completed, call nextSequence afte4r 1000 millisecond delay
+      if (userClickedPattern.length === gamePattern.length) {
+         setTimeout(function() {
+            nextSequence();
+         }, 1000);
+      }
+   }
+   else {
+      console.log("wrong");
+      playSound("wrong")
+      $("body").addClass("game-over");
+
+      setTimeout(function(){
+         $("body").removeClass("game-over");
+      }, 200);
+
+      $("#level-title").text("Game Over, Press Any Key to Restart");
+      startOver();
+   }
+}
+
+// play the game
+var gameOver = false;
+function playGame(){
+   console.log(userClickedPattern);
+   console.log(gamePattern);
+   if (gamePattern === userClickedPattern){
+      nextSequence();
+   } else {
+      alert("Game Over");
+   }
+}
+
+// reset all variables
+function startOver() {
+   level = 0;
+   gamePattern = [];
+   started = false;
+}
